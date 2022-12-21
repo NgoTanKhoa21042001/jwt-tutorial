@@ -1,7 +1,7 @@
 // hash pass
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
-
+const jwt = require("jsonwebtoken");
 const authController = {
   // REGISTER
   registerUser: async (req, res) => {
@@ -39,7 +39,20 @@ const authController = {
         res.status(404).json("Incorrect password");
       }
       if (user && validPassword) {
-        res.status(200).json(user);
+        const accessToken = jwt.sign(
+          {
+            // Mún thông tin id user
+            id: user.id,
+            admin: user.admin,
+          },
+          // mã bí mật
+          process.env.JWT_ACCESS_KEY,
+          // thời gian hết hạn
+          { expiresIn: "30d" }
+        );
+        // ko trả password
+        const { password, ...others } = user._doc;
+        res.status(200).json({ ...others, accessToken });
       }
     } catch (error) {
       res.status(500).json(error);
