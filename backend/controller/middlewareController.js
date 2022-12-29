@@ -25,6 +25,7 @@ const middlwareController = {
   // xác thực xem có phải chình mình hay admin hay ko
   verifyTokenAndAdminAuth: (req, res, next) => {
     middlwareController.verifyToken(req, res, () => {
+      // so sánh có trùng id hay ko
       if (req.user.id == req.params.id || req.user.admin) {
         next();
       } else {

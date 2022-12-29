@@ -1,11 +1,13 @@
 const authController = require("../controller/authController");
 
 // route này đảm nhiệm login và logout
-const route = require("express").Router();
+const router = require("express").Router();
 // register
-route.post("/register", authController.registerUser);
+router.post("/register", authController.registerUser);
 
 //login
-route.post("/login", authController.loginUser);
+router.post("/login", authController.loginUser);
 
-module.exports = route;
+// REFRESH
+router.post("/refresh", authController.requestRefreshToken);
+module.exports = router;
